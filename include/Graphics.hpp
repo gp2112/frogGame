@@ -1,22 +1,24 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <SDL2/SDL.h>
-
+#include "SDL.h"
+#include "SDL_image.h"
+#include "constants.hpp"
+#include "Object.hpp"
 
 class Graphics {
 
 private:
-	SDL_Window *window;
-	SDL_Renderer *renderer;
-	SDL_Texture *textures[TEXTURE_N];
+	SDL_Window* window;
+	SDL_Renderer* renderer;
+	//SDL_Texture* textures[TEXTURE_N];
 
 
 public:
 	Graphics();
-	void renderPlayerTexture();
-	void renderObjTexture();
-
+	void renderObj(Object* obj);
+	void show(); 
+	SDL_Renderer* getRenderer();
 };
 
 #endif
