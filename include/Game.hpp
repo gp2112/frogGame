@@ -5,19 +5,26 @@
 #include "Object.hpp"
 
 #include <list>
+#include <thread>
+
 using namespace std;
 class Game {
 
 private:
 	int points;
-	bool is_paused;
+	bool pause = false;
 	bool quit = false;
+	thread t_input;
 	Graphics* graphics;
-	list<Object*> frogs;
 	SDL_Event event;
-	void setupPlayer();
-	void createFrog();
 	Object* player;
+	list<Object*> frogs;
+	void setupPlayer();
+	void getInput();
+	void createFrog();
+	void removeFrog(list<Object*>::iterator k);
+	void moveFrogs();
+	void keyPressed(SDL_Keycode key, bool down);
 
 public:
 	Game();

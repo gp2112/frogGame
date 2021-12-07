@@ -1,7 +1,11 @@
 #include "AnimationController.hpp"
 
-#include "SDL.h"
-#include "SDL_image.h"
+#ifndef __linux__
+	#include "SDL.h"
+#else
+	#include <SDL2/SDL.h>
+#endif
+
 #include <iostream>
 
 

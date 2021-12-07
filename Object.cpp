@@ -1,6 +1,6 @@
 #include "Object.hpp"
 
-Object::Object(int x0, int y0, int h0, int w0, bool wa, int sx, int sy, AnimationController* anim, SDL_Texture* tx) {
+Object::Object(int x0, int y0, int h0, int w0, bool wa, double sx, double sy, AnimationController* anim, SDL_Texture* tx) {
 	dirX = 0; 
 	dirY = 0;
 	x = x0;
@@ -16,11 +16,23 @@ Object::Object(int x0, int y0, int h0, int w0, bool wa, int sx, int sy, Animatio
 void Object::move() {
 	x += speed_x*dirX;
 	y += speed_y*dirY;
+
+	speed_x += ac_x;
+	speed_y += ac_y;
 }
 void Object::setDir(int _x, int _y) {
 	dirX = _x;
 	dirY = _y;
 }
+
+int Object::getDirX() {
+	return dirX;
+}
+
+int Object::getDirY() {
+	return dirY;
+}
+
 void Object::update() {
 	move();
 	animationController->updateFrame();
@@ -42,12 +54,18 @@ int Object::getY() {
 	return y;
 }
 
-int Object::getSpeedY() {
+void Object::setAceleration(double _x, double _y) {
+	ac_x = _x;
+	ac_y = _y;
+}
+
+double Object::getSpeedY() {
 	return y;
-}int Object::getSpeedX() {
+}
+double Object::getSpeedX() {
 	return x;
 }
-void Object::setSpeed(int _x, int _y) {
+void Object::setSpeed(double _x, double _y) {
 	speed_x = _x;
 	speed_y = _y;
 }
@@ -60,7 +78,7 @@ void Object::setSize(int _w, int _h) {
 	h = _h;
 }
 bool Object::isOut() {
-	return false;
+	return (x < -w || x > WIDTH+w || y < -h || y > HEIGHT+h);
 }
 AnimationController* Object::getAnimationController() {
 	return animationController;

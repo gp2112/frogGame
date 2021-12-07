@@ -1,5 +1,6 @@
+#include <cmath>
+#include <iostream>
 #include "Graphics.hpp"
-
 
 Graphics::Graphics() {
 	
@@ -13,18 +14,25 @@ Graphics::Graphics() {
 	//AnimationController* animationController = new AnimationController(32,40,10,4);
 
 }
-void Graphics::renderObj(Object* obj) {
+void Graphics::renderObj(Object *obj) {
 	AnimationController* objAnim = obj->getAnimationController();
 	int w = objAnim->getW();
 	int id= objAnim->getIndex();
 	int h = objAnim->getH();
-	SDL_Rect srcrect = { w*id,0,w,h};
+	SDL_Rect srcrect = {w*id, 0, w, h};
 	SDL_Rect dstrect = {obj->getX(), obj->getY(), obj->getW(), obj->getH()};
-	SDL_RenderCopy(renderer, obj->getTexture(), &srcrect, &dstrect);
+	
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+	if (obj->getDirX()==-1)
+		flip = SDL_FLIP_HORIZONTAL;
+
+	SDL_RenderCopyEx(renderer, obj->getTexture(), &srcrect, &dstrect, 0, NULL, flip);
 }
 
 void Graphics::show() {
-	SDL_RenderPresent(renderer); SDL_RenderClear(renderer);
+	SDL_RenderPresent(renderer); 
+	SDL_RenderClear(renderer);
 }
 
 SDL_Renderer* Graphics::getRenderer() {

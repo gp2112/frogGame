@@ -21,5 +21,8 @@
 #define PLAYER_W 32
 #define PLAYER_H 40
 
+//player 
+
+#define PLAYER_SPD 8
 
 #endif
