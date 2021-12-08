@@ -15,7 +15,7 @@ class Object {
 	int dirX, dirY;
 	int margin;
 	double speed_x, speed_y;
-	double ac_x, ac_y;
+	double ac_x=0, ac_y=0;
 	bool wall;
 	AnimationController* animationController;
 	SDL_Texture* texture;

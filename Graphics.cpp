@@ -17,7 +17,7 @@ Graphics::Graphics() {
 void Graphics::renderObj(Object *obj) {
 	AnimationController* objAnim = obj->getAnimationController();
 	int w = objAnim->getW();
-	int id= objAnim->getIndex();
+	int id = objAnim->getIndex();
 	int h = objAnim->getH();
 	SDL_Rect srcrect = {w*id, 0, w, h};
 	SDL_Rect dstrect = {obj->getX(), obj->getY(), obj->getW(), obj->getH()};
