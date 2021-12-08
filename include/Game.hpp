@@ -11,7 +11,7 @@ using namespace std;
 class Game {
 
 private:
-	int points;
+	int points=0;
 	bool pause = false;
 	bool quit = false;
 	thread t_input;

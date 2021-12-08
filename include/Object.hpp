@@ -13,6 +13,7 @@
 class Object {
 	int x, y, h, w;
 	int dirX, dirY;
+	int margin;
 	double speed_x, speed_y;
 	double ac_x, ac_y;
 	bool wall;
@@ -40,6 +41,7 @@ public:
 	bool isOut();
 	int getDirX();
 	int getDirY();
+	double dist(Object *obj);
 };
 
 class Player : public Object {

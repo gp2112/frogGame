@@ -32,12 +32,14 @@ void Game::moveFrogs() {
         frog = *k;
         frog->move();
         graphics->renderObj(frog);
-        if (frog->getY() > 0 && frog->isOut()) {
+        if (player->dist(frog) < -20 || frog->getY() > 0 && frog->isOut()) {
             aux = k;
             k--;
             frogs.erase(aux);
             delete *aux;
         }
+        if (player->dist(frog) < -20)
+            points++;
     }
 }
 
@@ -46,7 +48,7 @@ void Game::setupPlayer() {
     AnimationController* playerAnim = new AnimationController(32, 40, 100, 4);
     SDL_Surface* image = IMG_Load("player_spritesheetCuia.png");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
-    player = new Object(WIDTH/2-32, HEIGHT-80, 80, 64, false, PLAYER_SPD, 0,playerAnim ,texture);
+    player = new Object(WIDTH/2-32, HEIGHT-80, 80, 64, false, PLAYER_SPD, 0, playerAnim ,texture);
 
 }
 

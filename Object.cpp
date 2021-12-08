@@ -1,5 +1,7 @@
 #include "Object.hpp"
 
+#include <cmath>
+
 Object::Object(int x0, int y0, int h0, int w0, bool wa, double sx, double sy, AnimationController* anim, SDL_Texture* tx) {
 	dirX = 0; 
 	dirY = 0;
@@ -23,6 +25,13 @@ void Object::move() {
 void Object::setDir(int _x, int _y) {
 	dirX = _x;
 	dirY = _y;
+}
+
+
+// retorna distancia do objeto para outro
+double Object::dist(Object *obj) {
+	return sqrt(pow(x-obj->getX(), 2) +  pow(y-obj->getY(), 2))
+	- (sqrt(h*h +  w*w) + sqrt(obj->getH()*obj->getH() + obj->getW()*obj->getW()))/2;
 }
 
 int Object::getDirX() {
