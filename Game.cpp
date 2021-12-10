@@ -1,7 +1,6 @@
 #include "Game.hpp"
 #include <iostream>
 
-#include <thread>
 
 Game::Game() {
 	graphics = new Graphics();
