@@ -35,6 +35,10 @@ int AnimationController::getW() {
 int AnimationController::getH() {
 	return h;
 }
+void AnimationController::setIndex(int i) {
+	index = i;
+}
 int AnimationController::getIndex() {
+	
 	return index;
 }

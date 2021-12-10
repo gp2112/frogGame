@@ -19,6 +19,8 @@ public:
 	int getW();
 	int getH();
 	int getIndex();
+	void setIndex(int i);
+
 };
 
 
