@@ -1,6 +1,10 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#define DEBUG true
+
+#define D if(DEBUG)
+
 
 // window
 #define WIDTH 450

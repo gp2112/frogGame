@@ -6,7 +6,7 @@ Game::Game() {
 	graphics = new Graphics();
 	points = 0;
     t_input = std::thread(&Game::getInput, this);
-    
+    mixer = new Mixer(&quit);
 }
 
 void Game::createFrog() {
@@ -31,14 +31,16 @@ void Game::moveFrogs() {
         frog = *k;
         frog->move();
         graphics->renderObj(frog);
+        if (player->dist(frog) < -20) {
+            mixer->play(SAMPLE_COL);
+            points++;
+        }
         if (player->dist(frog) < -20 || frog->getY() > 0 && frog->isOut()) {
             aux = k;
             k--;
             frogs.erase(aux);
             delete *aux;
         }
-        if (player->dist(frog) < -20)
-            points++;
     }
 }
 

@@ -1,49 +1,85 @@
-
+#include <iostream>
 #include "Sound.hpp"
 
 
+Sound::Sound(std::string _path) {
+	path = _path;
 
-Sound::Sound() {
+
+	if (SDL_LoadWAV(path.c_str(), &wav_specs, &wav_buffer, &audio_len)==NULL) {
+		std::cout << "Could not open sound file: " << _path << std::endl;	
+		std::cout << SDL_GetError() << std::endl;
+	}
 	
+	audio_pos = wav_buffer;
+	audio_len_miss = audio_len;
+
 }
+
 
 void audio_callback(void *userdata, Uint8 *stream, int len) {
-	
-	if (audio_len ==0)
-		return;
-	
-	len = ( len > audio_len ? audio_len : len );
-	
-	SDL_MixAudio(stream, audio_pos, len, SDL_MIX_MAXVOLUME);
-	
-	audio_pos += len;
-	audio_len -= len;
-}
 
-void Sound::play_async() {
-	SDL_AudioSpec want, have;
+	Sound *sound = (Sound *)userdata;
 
-	SDL_memset(&want, 0, sizeof(want)); /* or SDL_zero(want) */
-	want.freq = 48000;
-	want.format = AUDIO_F32;
-	want.channels = 2;
-	want.samples = 4096;
-	want.callback = MyAudioCallback; /* you wrote this function elsewhere -- see SDL_AudioSpec for details */
+	D std::cout << 100 - 100*(double)((double)sound->audio_len_miss/(double)sound->audio_len) << "%" << std::endl;
 
-	if (SDL_OpenAudio(&want, &have) < 0) {
-	    SDL_Log("Failed to open audio: %s", SDL_GetError());
-	} else {
-	    if (have.format != want.format) {
-	        SDL_Log("We didn't get Float32 audio format.");
-	    }
-	    SDL_PauseAudio(0); /* start audio playing. */
-	    SDL_Delay(5000); /* let the audio callback play some sound for 5 seconds. */
-	    SDL_CloseAudio();
+	if (sound->audio_len_miss <= 0) {
+		D std::cout << "stopped" << std::endl;
+		return; 
 	}
+	
+	len = ( len > sound->audio_len_miss ? sound->audio_len_miss : len );
+	
+	SDL_memset(stream, 0, len);
+	SDL_MixAudio(stream, sound->audio_pos, len, SDL_MIX_MAXVOLUME);
+	sound->audio_pos += len;
+	sound->audio_len_miss -= len;
 }
 
 
-void Sound::play(string path) {
-	 std::thread sd(&Sound::play_async, this);
+bool Sound::play() {
+	wav_specs.callback = audio_callback;
+	wav_specs.userdata = this;
+
+	if (SDL_OpenAudio(&wav_specs, NULL) < 0) {
+		std::cout << "Could not play song" << std::endl;
+		return false;
+	}
+
+	SDL_PauseAudio(0);
+
+	while (audio_len_miss > 0)
+		SDL_Delay(100);
 	
+	D std::cout << "stopped playing audio" << std::endl;
+
+	SDL_CloseAudio();
+
+	return true;
+	
+}
+
+void Sound::stop() {
+	SDL_CloseAudio();
+}
+
+void Sound::restart() {
+	audio_len_miss = audio_len;
+	audio_pos = wav_buffer;
+}
+
+void Sound::free() {
+	SDL_FreeWAV(wav_buffer);
+}
+
+void Sound::pause() {
+	SDL_PauseAudio(1);
+}
+
+void Sound::resume() {
+	SDL_PauseAudio(0);
+}
+
+bool Sound::isOver() {
+	return audio_len_miss<=0;
 }

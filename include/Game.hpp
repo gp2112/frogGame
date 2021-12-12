@@ -3,6 +3,7 @@
 
 #include "Graphics.hpp"
 #include "Object.hpp"
+#include "Mixer.hpp"
 
 #include <list>
 #include <thread>
@@ -16,6 +17,7 @@ private:
 	bool quit = false;
 	thread t_input;
 	Graphics* graphics;
+	Mixer *mixer;
 	SDL_Event event;
 	Object* player;
 	list<Object*> frogs;

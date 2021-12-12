@@ -2,27 +2,33 @@
 #define SOUND_H
 
 #ifndef __linux__
-	#include "SDL_mixer.h"
+	#include "SDL.h"
 #else
-	#include <SDL2/SDL_audio.h>
+	#include <SDL2/SDL.h>
 #endif
 
-#include <thread>
+#include "constants.hpp"
 
 class Sound {
 
 private:
-	Uint32 wav_length;
-	Uint8 *wav_buffer; 
-	SDL_AudioSpec wav_spec;
-	std::thread threads;
-	int thread_n;
+
 
 public:
-	Sound();
-	void play(string path);
+	std::string path;
+	SDL_AudioSpec wav_specs;
+	Uint32 audio_len, audio_len_miss;
+	Uint8 *wav_buffer, *audio_pos;
+	Sound(std::string _path);
+	void stop();
+	void pause();
+	void free();
+	void resume();
+	bool play();
+	void restart();
+	bool isOver();
 
-}
+};
 
 
 #endif
