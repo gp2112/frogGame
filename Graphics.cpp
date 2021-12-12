@@ -8,7 +8,17 @@ Graphics::Graphics() {
 	window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_SetRenderDrawColor(renderer, 168, 230, 255, 255);
+	SDL_SetRenderDrawColor(renderer, 15, 15, 15, 255);
+	//blues
+	// 96, 192, 214
+	// 102, 162,209
+	// 169, 211, 209
+	// 135, 151,255
+	// red
+	// 190, 36, 94
+
+	//grey
+	// 23,23,23
 	SDL_RenderClear(renderer);
 
 	//AnimationController* animationController = new AnimationController(32,40,10,4);
@@ -20,6 +30,7 @@ void Graphics::renderObj(Object *obj) {
 	int id = objAnim->getIndex();
 	int h = objAnim->getH();
 	SDL_Rect srcrect = {w*id, 0, w, h};
+
 	SDL_Rect dstrect = {obj->getX(), obj->getY(), obj->getW(), obj->getH()};
 	
 	SDL_RendererFlip flip = SDL_FLIP_NONE;

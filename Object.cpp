@@ -15,6 +15,23 @@ Object::Object(int x0, int y0, int h0, int w0, bool wa, double sx, double sy, An
 	animationController = anim;
 	texture = tx;
 }
+
+Player::Player(int x0, int y0, int h0, int w0, bool wa, double sx, double sy, AnimationController* anim, SDL_Texture* tx) :
+Object(x0,y0,h0,w0,wa,sx,sy,anim,tx){
+	hp = PLAYER_MAX_HP;
+	is_hit = false;
+}
+
+int Player::getHp() {
+	return hp;
+}
+void Player::setHp(int hp0) {
+	hp = hp0;
+}
+bool Player::getDamage() {
+	hp--;
+	return (hp != 0);
+}
 void Object::move() {
 	x += speed_x*dirX;
 	y += speed_y*dirY;
@@ -43,9 +60,9 @@ int Object::getDirY() {
 }
 
 void Object::update() {
-	move();
 	animationController->updateFrame();
 }
+
 int Object::getH() {
 	return h;
 }

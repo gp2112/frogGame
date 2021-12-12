@@ -26,9 +26,11 @@ void AnimationController::setAnimation(int offset0, int n1) {
 
 void AnimationController::updateFrame() {
 	Uint32 ticks = SDL_GetTicks();
-	index = offset + ((ticks / rate) % n) ;
+	index = offset + ((ticks / rate) % n);
 }
-
+int AnimationController::getN() {
+	return n;
+}
 int AnimationController::getW() {
 	return w;
 }

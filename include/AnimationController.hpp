@@ -17,6 +17,7 @@ public:
 	void updateFrame();
 	void setAnimation(int offset, int n1);
 	int getW();
+	int getN();
 	int getH();
 	int getIndex();
 	void setIndex(int i);

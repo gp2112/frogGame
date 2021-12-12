@@ -49,10 +49,11 @@ class Player : public Object {
 	int hp;
 
 public:
-	Player(int x0, int y0);
-	void hit();
-	bool isHit();
-	void unhit();
+	Player(int x0, int y0, int h0, int w0, bool wa, double sx, double sy, AnimationController* anim, SDL_Texture* tx);
+	//void hit();
+	//bool isHit();
+	//void unhit();
+	bool getDamage();
 	int getHp();
 	void setHp(int hp0);
 };
