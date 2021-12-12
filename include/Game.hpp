@@ -21,6 +21,9 @@ private:
 	SDL_Event event;
 	Object* player;
 	list<Object*> frogs;
+	list<Object*> pointsViewer;
+	void showPoints();
+	void setupPoints();
 	void setupPlayer();
 	void getInput();
 	void createFrog();

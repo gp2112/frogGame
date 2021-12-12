@@ -9,6 +9,30 @@ Game::Game() {
     mixer = new Mixer(&quit);
 }
 
+void Game::setupPoints() {
+    for (int i = 0; i < 4; i++) {
+        AnimationController* pointAnim = new AnimationController(16, 16, 100, 10);
+        SDL_Surface* image = IMG_Load("numbers.png");
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
+        Object* pointObj = new Object(100-30*i, 10, 32, 32, false, 0, 0, pointAnim, texture);
+        pointsViewer.push_back(pointObj);
+    }
+    showPoints();
+}
+void Game::showPoints() {
+
+    std::list<Object*>::iterator k;
+    Object* pointView;
+    int p = points;
+    AnimationController* anim;
+    for (k = pointsViewer.begin(); k != pointsViewer.end(); k++) {
+        pointView = *k;
+        anim = pointView->getAnimationController();
+        anim->setIndex(p%10);
+        p /= 10;
+        graphics->renderObj(pointView);
+    }
+}
 void Game::createFrog() {
 
     AnimationController* frogAnim = new AnimationController(20, 20, 100, 4);
@@ -25,7 +49,8 @@ void Game::removeFrog(std::list<Object*>::iterator k) {
 }
 
 void Game::moveFrogs() {
-    std::list<Object*>::iterator k, aux;
+    std::list<Object*>::iterator k;
+    std::list<Object*>::iterator aux;
     Object* frog;
     for (k = frogs.begin(); k != frogs.end(); k++) {
         frog = *k;
@@ -37,12 +62,14 @@ void Game::moveFrogs() {
         }
         if (player->dist(frog) < -20 || frog->getY() > 0 && frog->isOut()) {
             aux = k;
-            k--;
-            frogs.erase(aux);
-            delete *aux;
+            delete* aux;
+            k=frogs.erase(k);
+            if (k == frogs.end())
+                break;
         }
     }
 }
+
 
 void Game::setupPlayer() {
 
@@ -124,6 +151,7 @@ void Game::play() {
     
     Uint32 seconds;
     setupPlayer();
+    setupPoints();
     int i = 0;
     while (!quit) {
         if (pause)
@@ -136,6 +164,7 @@ void Game::play() {
 
         player->update();
         moveFrogs();
+        showPoints();
 
         graphics->renderObj(player);
         graphics->show();
