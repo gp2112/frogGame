@@ -12,7 +12,7 @@ Game::Game() {
 void Game::setupPoints() {
     for (int i = 0; i < 4; i++) {
         AnimationController* pointAnim = new AnimationController(16, 16, 100, 10);
-        SDL_Surface* image = IMG_Load("numbers.png");
+        SDL_Surface* image = IMG_Load("img/numbers.png");
         SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
         Object* pointObj = new Object(100-30*i, 10, 32, 32, false, 0, 0, pointAnim, texture);
         pointsViewer.push_back(pointObj);
@@ -35,7 +35,7 @@ void Game::showPoints() {
 }
 void Game::createFrog() {
     AnimationController* frogAnim = new AnimationController(20, 20, 100, 4);
-    SDL_Surface* image = IMG_Load("frog.png");
+    SDL_Surface* image = IMG_Load("img/frog.png");
     if (rand() % 10 > 5)
         frogAnim->setIndex(1);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
@@ -47,7 +47,7 @@ void Game::createFrog() {
 void Game::createFx(int off,int n) {
 
     AnimationController* anim = new AnimationController(32, 32, 100, 5);
-    SDL_Surface* image = IMG_Load("fx_yellow.png");
+    SDL_Surface* image = IMG_Load("img/fx_yellow.png");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
     anim->setIndex(0);
     anim->setAnimation(off, n);
@@ -140,7 +140,7 @@ void Game::moveFrogs() {
 void Game::setupHearts() {
     for (int i = 0; i < PLAYER_MAX_HP; i++) {
         AnimationController* anim = new AnimationController(16, 16, 100, 7);
-        SDL_Surface* image = IMG_Load("hearts.png");
+        SDL_Surface* image = IMG_Load("img/hearts.png");
         SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
         anim->setIndex(0);
         Object* heart = new Object(WIDTH-i*32-42, 10, 32, 32, false, 0, 0, anim, texture);
@@ -176,7 +176,7 @@ void Game::restart() {
 void Game::setupPlayer() {
 
     AnimationController* playerAnim = new AnimationController(32, 40, 100, 4);
-    SDL_Surface* image = IMG_Load("player_spritesheetCuia.png");
+    SDL_Surface* image = IMG_Load("img/player_spritesheetCuia.png");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
     player = new Player(WIDTH/2-32, HEIGHT-90, 80, 64, false, PLAYER_SPD, 0, playerAnim ,texture);
 
@@ -253,13 +253,13 @@ void Game::getInput() {
 }
 void Game::setupScenary() {
     AnimationController* anim = new AnimationController(200, 300, 100, 7);
-    SDL_Surface* image = IMG_Load("clouds_light.png");
+    SDL_Surface* image = IMG_Load("img/clouds_light.png");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
     anim->setIndex(0);
      front = new Object(0, 0, 600, 400, false, 0, 0, anim, texture);
 
       anim = new AnimationController(200, 300, 100, 7);
-      image = IMG_Load("bg.png");
+      image = IMG_Load("img/bg.png");
       texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
      anim->setIndex(0);
      back = new Object(0, 0, 600, 400, false, 0, 0, anim, texture);
