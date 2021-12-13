@@ -11,6 +11,7 @@ class Mixer {
 private:
 	Sound *samples[SAMPLES_N];
 	std::thread *threads[SAMPLES_N];
+	bool detach_mutex=false;
 	bool *quit;
 
 public:

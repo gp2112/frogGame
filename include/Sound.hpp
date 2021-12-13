@@ -12,7 +12,7 @@
 class Sound {
 
 private:
-
+	bool is_open=false;
 
 public:
 	std::string path;

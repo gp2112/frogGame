@@ -38,13 +38,19 @@ void audio_callback(void *userdata, Uint8 *stream, int len) {
 
 
 bool Sound::play() {
+	if (is_open)
+		return true;
+
 	wav_specs.callback = audio_callback;
 	wav_specs.userdata = this;
+	int r;
 
-	if (SDL_OpenAudio(&wav_specs, NULL) < 0) {
-		std::cout << "Could not play song" << std::endl;
+
+	if ((r=SDL_OpenAudio(&wav_specs, NULL)) < 0) {
+		D std::cout << "Could not play song: "<< r << SDL_GetError()<< std::endl;
 		return false;
 	}
+	is_open = true;
 
 	SDL_PauseAudio(0);
 
@@ -54,13 +60,14 @@ bool Sound::play() {
 	D std::cout << "stopped playing audio" << std::endl;
 
 	SDL_CloseAudio();
+	is_open = false;
 
 	return true;
 	
 }
 
 void Sound::stop() {
-	SDL_CloseAudio();
+	audio_len_miss = 0;
 }
 
 void Sound::restart() {
