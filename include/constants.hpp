@@ -7,7 +7,7 @@
 
 
 // window
-#define WIDTH 450
+#define WIDTH 400
 #define HEIGHT 600
 #define TITLE "jogo"
 
@@ -28,6 +28,7 @@
 //player 
 
 #define PLAYER_SPD 8
+#define PLAYER_MAX_HP 3
 
 // sounds
 

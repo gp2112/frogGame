@@ -8,11 +8,10 @@ Game::Game() {
     t_input = std::thread(&Game::getInput, this);
     mixer = new Mixer(&quit);
 }
-
 void Game::setupPoints() {
     for (int i = 0; i < 4; i++) {
         AnimationController* pointAnim = new AnimationController(16, 16, 100, 10);
-        SDL_Surface* image = IMG_Load("numbers.png");
+        SDL_Surface* image = IMG_Load("img/numbers.png");
         SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
         Object* pointObj = new Object(100-30*i, 10, 32, 32, false, 0, 0, pointAnim, texture);
         pointsViewer.push_back(pointObj);
@@ -34,16 +33,52 @@ void Game::showPoints() {
     }
 }
 void Game::createFrog() {
-
     AnimationController* frogAnim = new AnimationController(20, 20, 100, 4);
-    SDL_Surface* image = IMG_Load("frog.png");
+    SDL_Surface* image = IMG_Load("img/frog.png");
+    if (rand() % 10 > 5)
+        frogAnim->setIndex(1);
     SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
-    Object* frog = new Object(rand()%(WIDTH-40)+20, -40, 40, 40, false, 0, 0, frogAnim, texture);
+    Object* frog = new Object(rand()%(WIDTH-80)+40, -40, 40, 40, false, 0, 0, frogAnim, texture);
     frog->setDir(0, 1);
     frog->setAceleration(0, GRAVITY);
     frogs.push_back(frog);
 }
+void Game::createFx(int off,int n) {
 
+    AnimationController* anim = new AnimationController(32, 32, 100, 5);
+    SDL_Surface* image = IMG_Load("img/fx_yellow.png");
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
+    anim->setIndex(0);
+    anim->setAnimation(off, n);
+    Object* fx = new Object(player->getX()-16, player->getY()-20, 100, 100, false, 0, 0, anim, texture);
+    fxObjs.push_back(fx);
+}
+void Game::showFxs() {
+
+    std::list<Object*>::iterator k;
+    std::list<Object*>::iterator aux;
+    AnimationController* anim;
+    Object* fx; 
+    Uint32 ticks = SDL_GetTicks();
+    for (k = fxObjs.begin(); k != fxObjs.end(); k++) {
+        fx = *k;
+        //fx->update();
+        anim = fx->getAnimationController();
+        int frameId = anim->getIndex();
+        if (ticks %2 == 0)
+            anim->setIndex(frameId + 1);
+        fx->setPosition(player->getX() - 16,fx->getY());
+        if (frameId >= anim->getN()) {
+            aux = k;
+            delete* aux;
+            k = fxObjs.erase(k);
+            if (k == fxObjs.end())
+                break;
+
+        }else
+        graphics->renderObj(fx);
+    }
+}
 void Game::removeFrog(std::list<Object*>::iterator k) {
     
 }
@@ -51,32 +86,99 @@ void Game::removeFrog(std::list<Object*>::iterator k) {
 void Game::moveFrogs() {
     std::list<Object*>::iterator k;
     std::list<Object*>::iterator aux;
-    Object* frog;
+    Object* fallingObj;
+    AnimationController* anim;
     for (k = frogs.begin(); k != frogs.end(); k++) {
-        frog = *k;
-        frog->move();
-        graphics->renderObj(frog);
-        if (player->dist(frog) < -20) {
-            mixer->play(SAMPLE_COL);
-            points++;
+        fallingObj = *k;
+        fallingObj->move();
+        anim = fallingObj->getAnimationController();
+        graphics->renderObj(fallingObj);
+
+        // is a frog
+        if (anim->getIndex() != 1) {
+            if (player->dist(fallingObj) < -20) {
+                points++;
+                createFx(0,5);
+                aux = k;
+                delete* aux;
+                k = frogs.erase(k);
+                if (k == frogs.end())
+                    break;
+            }
+            else if (fallingObj->getY() > 0 && fallingObj->isOut()) {
+                gameOver = (!player->getDamage());
+
+                aux = k;
+                delete* aux;
+                k = frogs.erase(k);
+                if (k == frogs.end())
+                    break;
+            }
         }
-        if (player->dist(frog) < -20 || frog->getY() > 0 && frog->isOut()) {
-            aux = k;
-            delete* aux;
-            k=frogs.erase(k);
-            if (k == frogs.end())
-                break;
+        // is not a frog
+        else {
+            if (player->dist(fallingObj) < -20) {
+                gameOver = (!player->getDamage());
+                createFx(6,10);
+                aux = k;
+                delete* aux;
+                k = frogs.erase(k);
+                if (k == frogs.end())
+                    break;
+            }
+            else if (fallingObj->getY() > 0 && fallingObj->isOut()) {
+                aux = k;
+                delete* aux;
+                k = frogs.erase(k);
+                if (k == frogs.end())
+                    break;
+            }
         }
     }
 }
-
-
+void Game::setupHearts() {
+    for (int i = 0; i < PLAYER_MAX_HP; i++) {
+        AnimationController* anim = new AnimationController(16, 16, 100, 7);
+        SDL_Surface* image = IMG_Load("img/hearts.png");
+        SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
+        anim->setIndex(0);
+        Object* heart = new Object(WIDTH-i*32-42, 10, 32, 32, false, 0, 0, anim, texture);
+        hearts.push_front(heart);
+    }
+}
+void Game::showHearts() {
+    std::list<Object*>::iterator k;
+    Object* heart;
+    AnimationController* anim;
+    int hp = player->getHp();
+    for (k = hearts.begin(); k != hearts.end(); k++) {
+        heart = *k;
+        if(hp<=0){
+            anim = heart->getAnimationController();
+            anim->setIndex(1);
+        }
+        graphics->renderObj(heart);
+        hp--;
+    }
+}
+void Game::restart() {
+    gameOver = false;
+    points = 0;
+    frogs.clear();
+    pointsViewer.clear();
+    hearts.clear();
+    fxObjs.clear();
+    setupPlayer();
+    setupPoints();
+    setupHearts();
+}
 void Game::setupPlayer() {
 
     AnimationController* playerAnim = new AnimationController(32, 40, 100, 4);
-    SDL_Surface* image = IMG_Load("player_spritesheetCuia.png");
+    SDL_Surface* image = IMG_Load("img/player_spritesheetCuia.png");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
-    player = new Object(WIDTH/2-32, HEIGHT-80, 80, 64, false, PLAYER_SPD, 0, playerAnim ,texture);
+    player = new Player(WIDTH/2-32, HEIGHT-90, 80, 64, false, PLAYER_SPD, 0, playerAnim ,texture);
+
 
 }
 
@@ -127,23 +229,38 @@ void Game::keyPressed(SDL_Keycode key, bool down) {
 }
 
 void Game::getInput() {
-    while (!quit) {
-        SDL_WaitEvent(&event);
-        switch (event.type) {
+    while (!quit) { 
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
             case SDL_QUIT:
                 quit = true;
                 break;
 
             case SDL_KEYUP:
                 keyPressed(event.key.keysym.sym, false);
-            break;
+                break;
 
             case SDL_KEYDOWN:
 
                 keyPressed(event.key.keysym.sym, true);
                 break;
+            }
         }
+
     }
+}
+void Game::setupScenary() {
+    AnimationController* anim = new AnimationController(200, 300, 100, 7);
+    SDL_Surface* image = IMG_Load("img/clouds_light.png");
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
+    anim->setIndex(0);
+     front = new Object(0, 0, 600, 400, false, 0, 0, anim, texture);
+
+      anim = new AnimationController(200, 300, 100, 7);
+      image = IMG_Load("img/bg.png");
+      texture = SDL_CreateTextureFromSurface(graphics->getRenderer(), image);
+     anim->setIndex(0);
+     back = new Object(0, 0, 600, 400, false, 0, 0, anim, texture);
 }
 
 void Game::play() {
@@ -152,22 +269,30 @@ void Game::play() {
     Uint32 seconds;
     setupPlayer();
     setupPoints();
+    setupScenary();
+    setupHearts();
     int i = 0;
     while (!quit) {
         if (pause)
             continue;
-        i+=1;
-        if (i >= 60) {
+        if (gameOver)
+            restart();
+        i += 1;
+        if (i == 50) {
             i = 0;
             createFrog();
         }
-
+        graphics->renderObj(back);
+        player->move();
         player->update();
         moveFrogs();
-        showPoints();
-
         graphics->renderObj(player);
+        showFxs();
+        graphics->renderObj(front);
+        showPoints();
+        showHearts();
         graphics->show();
+
         SDL_Delay(16);
     }
 }

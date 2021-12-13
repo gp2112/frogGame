@@ -15,14 +15,24 @@ private:
 	int points=0;
 	bool pause = false;
 	bool quit = false;
+	bool gameOver = false;
 	thread t_input;
 	Graphics* graphics;
 	Mixer *mixer;
 	SDL_Event event;
-	Object* player;
+	Player* player;
 	list<Object*> frogs;
 	list<Object*> pointsViewer;
+	list<Object*> fxObjs;
+	list<Object*> hearts;
+	Object* front;
+	Object* back;
 	void showPoints();
+	void setupScenary();
+	void setupHearts();
+	void showHearts();
+	void createFx(int off, int n);
+	void showFxs();
 	void setupPoints();
 	void setupPlayer();
 	void getInput();
@@ -34,7 +44,7 @@ private:
 public:
 	Game();
 	void play();
-
+	void restart();
 };
 
 
