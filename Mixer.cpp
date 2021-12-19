@@ -7,7 +7,8 @@ Mixer::Mixer(bool *_quit) {
 	quit=_quit;
 	memset(samples, 0, sizeof(samples));
 	memset(threads, 0, sizeof(threads));
-	samples[SAMPLE_COL] = new Sound("sound/frog_collect.wav");
+	samples[SAMPLE_FROG] = new Sound("sound/frog_collect.wav");
+	samples[SAMPLE_COL] = new Sound("sound/damage.wav");
 	verify_th = std::thread(&Mixer::verify, this);
 }
 

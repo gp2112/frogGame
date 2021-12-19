@@ -21,9 +21,30 @@ Graphics::Graphics() {
 	// 23,23,23
 	SDL_RenderClear(renderer);
 
+	textures[TX_BG] = IMG_LoadTexture(renderer, "img/bg.png");
+	textures[TX_CLOUDS_D] = IMG_LoadTexture(renderer, "img/clouds_dark.png");
+	textures[TX_CLOUDS_L] = IMG_LoadTexture(renderer, "img/clouds_light.png");
+	textures[TX_FROG] = IMG_LoadTexture(renderer, "img/frog.png");
+	textures[TX_FX_GREEN] = IMG_LoadTexture(renderer, "img/fx_green.png");
+	textures[TX_FX_YELLOW] = IMG_LoadTexture(renderer, "img/fx_yellow.png");
+	textures[TX_HEARTS] = IMG_LoadTexture(renderer, "img/hearts.png");
+	textures[TX_HEARTS_ORANGE] = IMG_LoadTexture(renderer, "img/hearts_orange.png");
+	textures[TX_NUMBERS] = IMG_LoadTexture(renderer, "img/numbers.png");
+	textures[TX_NUMBERS_ORANGE] = IMG_LoadTexture(renderer, "img/numbers_orange.png");
+	textures[TX_PERSON_CUIA] = IMG_LoadTexture(renderer, "img/personage_cuia.png");
+	textures[TX_PERSON_NOCAP] = IMG_LoadTexture(renderer, "img/player_nocap.png");
+	textures[TX_PERSON_SPRITE] = IMG_LoadTexture(renderer, "img/player_spritesheetCuia.png");
+
 	//AnimationController* animationController = new AnimationController(32,40,10,4);
 
 }
+
+SDL_Texture *Graphics::getTexture(int id) {
+	if (id >= TEXTURE_N || id < 0)
+		return NULL;
+	return textures[id];
+}
+
 void Graphics::renderObj(Object *obj) {
 	AnimationController* objAnim = obj->getAnimationController();
 	int w = objAnim->getW();

@@ -18,7 +18,7 @@ class Graphics {
 private:
 	SDL_Window* window;
 	SDL_Renderer* renderer;
-	//SDL_Texture* textures[TEXTURE_N];
+	SDL_Texture* textures[TEXTURE_N];
 
 
 public:
@@ -26,6 +26,7 @@ public:
 	void renderObj(Object* obj);
 	void show(); 
 	SDL_Renderer* getRenderer();
+	SDL_Texture* getTexture(int id);
 };
 
 #endif
