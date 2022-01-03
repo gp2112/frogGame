@@ -40,6 +40,7 @@ private:
 	void removeFrog(list<Object*>::iterator k);
 	void moveFrogs();
 	void keyPressed(SDL_Keycode key, bool down);
+	void endScreen();
 
 public:
 	Game();

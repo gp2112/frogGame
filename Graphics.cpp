@@ -34,6 +34,7 @@ Graphics::Graphics() {
 	textures[TX_PERSON_CUIA] = IMG_LoadTexture(renderer, "img/personage_cuia.png");
 	textures[TX_PERSON_NOCAP] = IMG_LoadTexture(renderer, "img/player_nocap.png");
 	textures[TX_PERSON_SPRITE] = IMG_LoadTexture(renderer, "img/player_spritesheetCuia.png");
+	textures[TX_BG2] = IMG_LoadTexture(renderer, "img/bg2.png");
 
 	//AnimationController* animationController = new AnimationController(32,40,10,4);
 

@@ -166,6 +166,7 @@ void Game::restart() {
     pointsViewer.clear();
     hearts.clear();
     fxObjs.clear();
+    setupScenary();
     setupPlayer();
     setupPoints();
     setupHearts();
@@ -216,8 +217,10 @@ void Game::keyPressed(SDL_Keycode key, bool down) {
             
         break;
         case SDLK_ESCAPE:
-            if (down)
-                pause=!pause;
+            if (down) {
+                pause=false;
+                restart();
+            }
         break;
         case SDLK_BACKSPACE:
             //restart();
@@ -258,6 +261,31 @@ void Game::setupScenary() {
      back = new Object(0, 0, 600, 400, false, 0, 0, anim, texture);
 }
 
+void Game::endScreen() {
+
+    pause = true;
+    AnimationController* anim = new AnimationController(200, 300, 100, 7);
+    SDL_Texture* texture = graphics->getTexture(TX_BG2);
+    anim->setIndex(0);
+    front = new Object(0, 0, 600, 400, false, 0, 0, anim, texture);
+
+
+
+    std::list<Object *>::iterator k;
+    Object *pointView;
+    int size = 56;
+    int i = 0;
+    for (k = pointsViewer.begin(); k != pointsViewer.end(); k++) {
+        pointView = *k;
+        anim = pointView->getAnimationController();
+        pointView->setPosition(WIDTH / 2 + size -i * size, HEIGHT / 2- size);
+        pointView->setSize(size, size);
+        i++;
+    }
+
+}
+
+
 void Game::play() {
 
     
@@ -268,10 +296,16 @@ void Game::play() {
     setupHearts();
     int i = 0;
     while (!quit) {
-        if (pause)
+        if (pause) {
+            graphics->renderObj(back);
+            graphics->renderObj(front);
+            showPoints();
+            graphics->show();
             continue;
-        if (gameOver)
-            restart();
+        }
+        if (gameOver) {
+            endScreen();
+        }
         i += 1;
         if (i == 50) {
             i = 0;

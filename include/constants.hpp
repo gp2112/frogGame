@@ -1,7 +1,7 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#define DEBUG true
+#define DEBUG false
 
 #define D if(DEBUG)
 
@@ -17,6 +17,7 @@
 // texture
 #define TEXTURE_N 15 //number of textures loaded
 #define TX_BG 0
+#define TX_BG2 13
 #define TX_HEARTS_ORANGE 1
 #define TX_CLOUDS_D 2
 #define TX_CLOUDS_L 3
