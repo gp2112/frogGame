@@ -1,6 +1,10 @@
 # Prerequisites
 *.d
 
+# SDL
+SDL2/*
+SDL2_image/*
+
 # Compiled Object files
 *.slo
 *.lo
