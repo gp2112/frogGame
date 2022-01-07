@@ -1,6 +1,13 @@
 #include <iostream>
 #include "Sound.hpp"
 
+/*
+
+Esta classe é utilizada para organizar cada som do jogo.
+Nela, é possível tocar o som ("play") e parar ("pause"), por exemplo.
+
+
+*/
 
 Sound::Sound(std::string _path) {
 	path = _path;
@@ -16,7 +23,7 @@ Sound::Sound(std::string _path) {
 
 }
 
-
+// função utilizada como callback do SDL_OpenAudio no método "play"
 void audio_callback(void *userdata, Uint8 *stream, int len) {
 
 	Sound *sound = (Sound *)userdata;

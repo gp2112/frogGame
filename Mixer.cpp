@@ -3,6 +3,28 @@
 #include "Mixer.hpp"
 
 
+/*
+
+O Mixer organiza os sons do jogo através da criação de uma thread para cada som.
+
+o array "samples" armazena classes Sound correspondentes a cada som do jogo.
+o array "threads" armazena as threads de cada som que está tocando.
+
+Ao chamar o método "play", o programa vai verificar se esse som já está sendo executado em uma thread.
+Caso já esteja, é finalizado para executar outra.
+
+antes, porém, é utilizado um semáforo mutex para impedir que seja acessado uma area da memória correspondente à que está sendo 
+analisada pelo método de verificação.
+
+o método "verify" é chamado em uma outra thread para verificar se algum som já foi executado, i.e. se a thread já foi finalizada.
+Caso já tenha sido, ela é excluída.
+
+
+
+
+*/
+
+
 Mixer::Mixer(bool *_quit) {
 	quit=_quit;
 	memset(samples, 0, sizeof(samples));
@@ -37,7 +59,8 @@ void Mixer::verify() {
 	while (!(*quit)) {
 		D std::cout << "verifying..." << std::endl;
 		for (int i=0; i<SAMPLES_N; i++) {
-			while (detach_mutex); // forbids access process if it's geting deleted
+
+			while (detach_mutex); // proíbe o acesso enquanto o método "play" estiver utilizando a mesma região de memória
 			if (threads[i]!=NULL)
 				if (samples[i]->isOver()) {
 					detach_mutex = true;
@@ -56,7 +79,7 @@ void Mixer::verify() {
 		SDL_Delay(100);
 	}
 
-	// when the game stops, release all audios
+	// quando o jogo para, libera todos os áudios
 	for (int i=0; i<SAMPLES_N; i++) {
 		if (threads[i]!=NULL) {
 			delete threads[i];
