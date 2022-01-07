@@ -17,17 +17,21 @@ AnimationController::AnimationController(int w0, int h0, int rate0, int n0) {
 	rate = rate0;
 	n = n0;
 }
-
+// Define qual animação está rodando
 void AnimationController::setAnimation(int offset0, int n1) {
 	offset = offset0;
 	index = offset;
 	n = n1;
 }
 
+// Atualiza frame da animação atual
 void AnimationController::updateFrame() {
 	Uint32 ticks = SDL_GetTicks();
 	index = offset + ((ticks / rate) % n);
 }
+
+
+// Get/set
 int AnimationController::getN() {
 	return n;
 }
