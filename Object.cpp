@@ -2,6 +2,12 @@
 
 #include <cmath>
 
+
+/*
+Representa qualquer objeto do jogo
+
+*/
+
 Object::Object(int x0, int y0, int h0, int w0, bool wa, double sx, double sy, AnimationController* anim, SDL_Texture* tx) {
 	dirX = 0; 
 	dirY = 0;

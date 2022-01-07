@@ -94,9 +94,6 @@ void Game::showFxs() {
     }
 }
 
-void Game::removeFrog(std::list<Object*>::iterator k) {
-    
-}
 
 // Lógica dos sapos/ objetos caindo
 void Game::moveFrogs() {
@@ -222,6 +219,8 @@ void Game::setupPlayer() {
 
 }
 
+
+// função de controle de comandos
 void Game::keyPressed(SDL_Keycode key, bool down) {
 
     AnimationController *anim;
@@ -271,7 +270,7 @@ void Game::keyPressed(SDL_Keycode key, bool down) {
 }
 
 
-
+// função chamada por uma thread, roda enquanto o jogo não acabar aguardando por entradas do jogador (teclado)
 void Game::getInput() {
     while (!quit) { 
         while (SDL_PollEvent(&event)) {

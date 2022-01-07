@@ -1,6 +1,9 @@
 # Prerequisites
 *.d
 
+*.zip
+*.txt
+
 # SDL
 SDL2/*
 SDL2_image/*

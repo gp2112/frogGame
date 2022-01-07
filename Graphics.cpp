@@ -2,6 +2,14 @@
 #include <iostream>
 #include "Graphics.hpp"
 
+
+/*
+Lida com a renderização das texturas.
+
+Armazena cada textura no array "textures".
+
+*/
+
 Graphics::Graphics() {
 	
 	SDL_Init(SDL_INIT_EVERYTHING);
